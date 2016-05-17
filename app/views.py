@@ -62,6 +62,7 @@ def home():
     recommend=[]
     recommends=[]
     recommending =[]
+    recommendings =[]
     users = Users.query.filter_by(id=user_id).first()
     category = users.users_category
     for cat in users.users_category:
@@ -82,24 +83,24 @@ def home():
             if v.get('category')== i.id and v.get('days')>0:
                 if i.id not in cat_list:
                     cat_list.append(i.id)
-    # filtered_recommendations = filtered_recommendation()
-    # first_list = filtered_recommendations[1]
-    # second_list = filtered_recommendations[0]
+    filtered_recommendations = filtered_recommendation()
+    first_list = filtered_recommendations[1]
+    second_list = filtered_recommendations[0]
     
-    # in_first = set(first_list)
-    # in_second = set(second_list)
+    in_first = set(first_list)
+    in_second = set(second_list)
 
-    # in_second_but_not_in_first = in_second - in_first
+    in_second_but_not_in_first = in_second - in_first
     
-    # recommender = first_list + list(in_second_but_not_in_first)
-    # for evnt_id in recommender:
-    #     recommending.append(Event.query.filter_by(id=evnt_id).first())
-    # for evnt_id in recommending:
-    #     due = time_remainding(evnt.date,evnt.start_time)
-    #     evnt.append({"id":evnt.id,"creator":evnt.creator,"category":evnt.category,"poster":evnt.poster,"eventname":evnt.eventname,"date":evnt.date,"start_time":evnt.start_time,"end_time":evnt.end_time,"venue":evnt.venue,"lat":evnt.lat,"lng":evnt.lng,"capacity":evnt.capacity,"addmission":evnt.admission,"description":evnt.description,"contact":evnt.contact,"days":due[0],"hours":due[1]})
+    recommender = first_list + list(in_second_but_not_in_first)
+    for evnt_id in recommender:
+        recommending.append(Event.query.filter_by(id=evnt_id).first())
+    for evnts in recommending:
+        due = time_remainding(evnts.date,evnts.start_time)
+        recommendings.append({"id":evnts.id,"creator":evnts.creator,"category":evnts.category,"poster":evnts.poster,"eventname":evnts.eventname,"date":evnts.date,"start_time":evnts.start_time,"end_time":evnts.end_time,"venue":evnts.venue,"lat":evnts.lat,"lng":evnts.lng,"capacity":evnts.capacity,"addmission":evnts.admission,"description":evnts.description,"contact":evnts.contact,"days":due[0],"hours":due[1]})
     
     if recommend:
-        return render_template('home.html',recommend=recommend,recommending=recommending,recommends=recommends,category=category,cat_list=cat_list)
+        return render_template('home.html',recommend=recommend,recommendings=recommendings,recommends=recommends,category=category,cat_list=cat_list)
     else:
         return redirect(url_for('welcome'))
 
@@ -324,7 +325,7 @@ def filtered_recommendation():
         raw_lst.append(rec[w][0])
     
     # pdb.set_trace()
-    return (raw_lst, predicted_lst)
+    return [raw_lst, predicted_lst]
 	
 @login_required
 @app.route("/welcome", methods=['GET', 'POST'])

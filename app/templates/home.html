@@ -9,7 +9,7 @@
 <div class="row">
 	{% if recommend %}
 	<div class="row">
-				<h1 style="margin-left:40%;font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">My Recommendations</h1>
+				<h1 style="margin-left:40%;font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">Popular Trending Events</h1>
 			</div>
 		<div id="mi-slider" class="mi-slider">
 			{% for cat in cat_list %}
@@ -54,6 +54,36 @@
 		</div>
 	{% endif %}
 <div class="myRecommendations" style="margin:30px;">
+<div class="row">
+<div class="row">
+	<h1 style="font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">Recommended events for you</h1>
+</div>
+{% if recommendings %}
+	{% for lists in recommendings %}
+	{% if lists.days > 0 %}
+		<div class="thumb" style="position: relative; width:240px;float:left;padding:20px;">
+			<div class="card hoverable small">
+				<div class="card-image">
+					<a href="/details/{{lists.id}}"><img height="160px" src="/static/posters/{{ lists.poster }}"></a>
+				</div>
+				<div class="card-content" style="width:100%">
+					<span class="card-title activator grey-text text-darken-4" style="font-size:15px;font-weight:bold;">{{ lists.eventname }}<i class="material-icons right">more_vert</i></span></span>
+				</div>
+				<div class="card-reveal">
+			      <span class="card-title activator grey-text text-darken-4">{{lists.eventname}}<i class="material-icons right">close</i></span>
+			      	<p style="float:left;">Starts : {{ lists.start_time }} </p>
+					<p style="float:left;">Ends : {{ lists.end_time }}</p>
+					<p style="float:left;">Venue : {{ lists.venue }}</p>
+			    </div>
+				<div class="card-action">
+					<i class="small material-icons">query_builder</i><span class="time" style="margin-left:8px;">{{ lists.days }}d {{lists.hours}}{% if lists.hours==1 %}hr{% else %}hrs{% endif %}</span>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+</div>
 <div class="row">
 <div class="row">
 	<h1 style="font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">Upcoming Events</h1>

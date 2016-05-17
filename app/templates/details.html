@@ -55,14 +55,16 @@
                     <div class="row">
                         <div class="col l8 white-text">
                             <h5>{{event.eventname}}</h5>
-                            <h6>{{event.description[:event.description.find('.')]}}</h6>
+                            <h6>{{event.description[:100]}}</h6>
                         </div>
                         <div class="col l4 right-align">
                             <br>
+                            {% if user()!="Guest" %}
                             <form action="{{ url_for('events_listing', cat=event.category) }}" method="POST">
                                 <button class="waves-effect waves-light btn btn-large white orange-text btn-flat">Purchase</a>
                              	{{ form.event_number(type="hidden", value=event.id) }}
                     		</form>
+                    		{% endif %}
                         </div>
                     </div>
                 </div>
@@ -275,19 +277,36 @@
 			      		<div class="row">
 			        		<div class="input-field col s12">
 			          			<i class="material-icons prefix">account_circle</i>
+			          			{% if user()!="Guest" %}
 			          			<input id="icon_prefix" name=a type="text" style="width:250px;" value="{{users.usersname}}" class="validate">
   					  			<label for="icon_prefix">Username</label>
+  					  			{% else %}
+  					  			<input disabled="disabled" id="icon_prefix" name=a type="text" style="width:250px;" placeholder="Not logged in" class="validate">
+  					  			<label for="icon_prefix">Username</label>
+  					  			{% endif %}
   							</div>
   							<div class="input-field col s12">
 			          			<i class="material-icons prefix">comment</i>
+			          			{% if user()!="Guest" %}
 			          			<input type="hidden" name=c value={{event_id}}>
 			          			<input type="hidden" name=d value={{user_id}}>
 			          			<textarea id="icon_prefix2" name=b id="cPost" class="materialize-textarea"></textarea>
+			          			{% else %}
+			          			<input disabled="disabled" type="hidden" name=c value={{event_id}}>
+			          			<input disabled="disabled" type="hidden" name=d value={{user_id}}>
+			          			<textarea disabled="disabled" id="icon_prefix2" name=b id="cPost" class="materialize-textarea" placeholder="Must be logged in to comment"></textarea>
+			          			{% endif %}
 			          			<label for="textarea1">Comment</label>
 			        		</div>
+			        		{% if user()!="Guest" %}
 			        		<button style="float:right;" class="btn waves-effect waves-light" type="submit" id="upost" onclick="rmval();">POST
 								<i class="material-icons right">send</i><span id=result></span>
   							</button>
+  							{% else %}
+  							<button style="float:right;" disabled="disabled" class="btn waves-effect waves-light" type="submit" id="upost" onclick="rmval();">POST
+								<i class="material-icons right">send</i><span id=result></span>
+  							</button>
+  							{% endif %}
 			      		</div>
   					</div>
 				</div>

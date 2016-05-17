@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
-<body>
+<style>
+  .not-active {
+   pointer-events: none;
+   cursor: default;
+</style>
   <div class="container">
     <div class="row">
       {% for i in event_lst %}
@@ -21,7 +25,11 @@
             </div>
             <div class="card-action">
               <p>Views: {{ sum_page_count(i.id) }}</p>
+              {% if user()!="Guest" %}
               <a class="waves-effect waves-light btn modal-trigger" href="#modal{{ i.id }}">purchase</a>
+              {% else %}
+              <a class="waves-effect waves-light btn modal-trigger not-active">purchase</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -55,5 +63,4 @@
       {% endfor %}
     </div>
   </div>
-</body>
 {% endblock %}
