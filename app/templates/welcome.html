@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body %}
+ <script type="text/javascript">
+    $(document).ready(function() {
+  $('#modal1').openModal();
+});
+</script>
+	<div>
+		<!-- Modal Trigger -->
+	  	<div class="row center">
+	    	<button data-target="modal1" class="btn modal-trigger">Categories</button>
+	    </div
+
+		<!-- Modal Structure -->
+	  	<div id="modal1" class="modal modal-fixed-footer">
+	    	<div class="modal-content">
+	      		<h4 class="row center">Select Your Prefered Categories</h4>
+	      		<div class="row">
+	      			<form class="col s12" action="{{ url_for('welcome') }}" method="POST" enctype="multipart/form-data">
+	      				<button class="btn waves-effect waves-light pinned" style="margin-left:70%;margin-top:30%;" type="submit" name="action">Enter</button>
+	      				{% for j in lst %}
+	      				<div class="row">
+	      					<p>
+	      						<input type="checkbox" id="test{{ j.id }}" name="{{ j.category_name }}" />
+      							<label for="test{{ j.id }}">{{ j.category_name }}</label>
+	      					</p>
+	      				</div>
+	      				{% endfor %}
+	      				<div>
+	    					<!--<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat "><button class="btn waves-effect waves-light col s12" type="submit" name="action">Exit</a></a>-->
+	      					<!--<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">-->
+	      					
+	      					<!--</a>-->
+	    				</div>
+	      			</form>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+</body>
+{% endblock %}

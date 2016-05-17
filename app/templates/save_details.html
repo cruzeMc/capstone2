@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block additional %}
+		{% include "layout.html" %}
+		<link rel="stylesheet" type="text/css" href="/static/css/rating.css">
+		<script type="text/javascript" src="{{ url_for('static', filename='js/comments.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/commentz.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/load.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/page_hits.js') }}"></script>
+		<style>
+		
+		/*body{background-image: url('/static/background/jpg/bkg.jpg')*/
+		/*}*/
+		
+	
+        	.materialboxed {
+            margin: auto;
+            width: 85%;
+            border: 3px solid teal;
+            padding: 10px;
+            }
+            
+            p {
+            margin: auto;
+            width: 60%;
+            padding: 10px;
+            font-size:medium;
+            }
+            p1{font-size:30px;}
+            
+            
+	      /*span{background-color:green;}*/
+	         .map{ width:200px; height: 300px; margin:auto;width:80%;border: 3px solid teal;padding: 10px; }
+	         
+        </style>
+     	<script type="text/javascript" src="/static/js/script.js"></script>
+     	<link rel="stylesheet" type="text/css" href="/static/css/design.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+ 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+       
+        
+      
+        
+		
+{% endblock %}
+{% block body %}
+	
+
+	{% for evnt in ylist%}
+	    <body>
+	    	<meta id="event_data" name="event_data" content="{{ evnt.id }}">
+	    	<script type="text/javascript">
+           		var submit_rating = function(e){
+           			var id = $('meta[name=event_data]').attr("content");
+        			$.getJSON($SCRIPT_ROOT + '/rating_sent', {
+        				    a: (e+parseInt(id))
+        			}, function(data) {
+        				$('#result').text(data.result);
+        			});
+        			return false;
+        		};
+       
+            	$('body').click(function(event) {
+                	submit_rating(event.target.id);
+                	
+            	});
+        	</script>
+   			
+   				
+        	<div class="fixed-action-btn horizontal click-to-toggle">
+	           	<a class="btn-floating btn-large red">
+                	<i class="large material-icons">thumb_up</i>
+            	</a>
+			<ul>
+				<li><a class="btn-floating red"><i id="5" class="material-icons tooltipped" data-position="top" data-delay="50" data-tooltip="5">grade</i></a></li>
+			    <li><a class="btn-floating yellow darken-1"><i id="4" class="material-icons tooltipped" data-position="top" data-delay="50" data-tooltip="4">grade</i></a></li>
+			    <li><a class="btn-floating green"><i id="3" class="material-icons tooltipped" data-position="top" data-delay="50" data-tooltip="3">grade</i></a></li>
+			    <li><a class="btn-floating blue"><i id="2" class="material-icons tooltipped" data-position="top" data-delay="50" data-tooltip="2">grade</i></a></li>
+			    <li><a class="btn-floating purple"><i id="1" class="material-icons tooltipped" data-position="top" data-delay="50" data-tooltip="1">grade</i></a></li>
+			</ul>
+		</div>
+        	
+	    		<div class="row" style="width:900px;float:center-align;">
+	            	<img class="materialboxed " width="200" height="500" src="/static/posters/{{evnt.poster}}" align="middle">
+	            </div>
+	            <h4>DETAILS</h4>
+	            	<!--<div class="row" style="float:center-align;">-->
+	            		<!--<div id="wrapper">-->
+						  <!--<form action="" method="post">-->
+						  	<span>Event Rating: </span> 
+						  	<span id="result"></span>
+						  	<span>Event Views: </span>
+						  	<span id="hits">{{sum_page_count(event_id)}}</span>
+						  	<!--<input type="submit" value="submit" name="submit" />-->
+			
+						  <!--</form>-->
+						<!--</div>-->
+	            	<!--</div>-->
+	           
+	            
+	            <div class="row" style="float:center-align;">
+	                <div class="col s12 m4 l4" style="float:middle;">
+	            	    <p><p1>Admission:</p1>{{evnt.admission}}</p> 
+	            	    <p><p1>Event name:</p1>{{evnt.eventname}}</p>
+	            	    <p><p1>Date:</p1>{{evnt.date}}</p>
+			            <p><p1>Time:</p1>{{evnt.start_time}}-{{evnt.end_time}}</p>
+			            <p><p1>Venue:</p1>{{evnt.venue}}</p>
+			            <p><p1>Description:</p1>{{evnt.description}}</p>
+			            <p><p1>Promoter Contact:</p1>{{evnt.contact}}</p>
+	              </div>
+	            
+	            	<div class="col s12 m4 l4" style="float:center;">
+	           
+	          <input id="pac-input" size="100"  type="text" name="venue" value="{{evnt.venue}}" >
+	        
+	           <script>document.getElementById("pac-input").submit();</script>
+	          <div id="map" ></div>
+	          
+              <script src = "script.js"></script>
+             
+              <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAucSUfxFiQtI4imzzPJXoCPfyn6P_9MAs&libraries=places&callback=initAutocomplete"
+         async defer></script>
+        
+          
+             
+	            		<!--<div class="hide" id="pac-input"> {{evnt.venue}} </div>-->
+	            	
+	            	</div>
+	            </div>
+	            <h4>COMMENTS</h4>
+	            	<div class="container">
+	            	<div class="row">
+	            	<div class="col s12 m4 l8">
+					      <div class="row">
+					        <div class="input-field col s12">
+					          <i class="material-icons prefix">account_circle</i>
+					          <input id="icon_prefix" name=a type="text" style="width:250px;" value="{{user.usersname}}" class="validate">
+          					  <label for="icon_prefix">Username</label>
+          					</div>
+          					<div class="input-field col s12">
+					          <i class="material-icons prefix">comment</i>
+					          <input type="hidden" name=c value={{event_id}}>
+					          <input type="hidden" name=d value={{user_id}}>
+					          <textarea id="icon_prefix2" name=b class="materialize-textarea"></textarea>
+					          <label for="textarea1">Comment</label>
+					        </div>
+					        <button style="float:right;" class="btn waves-effect waves-light" type="submit" id="upost">POST
+    						<i class="material-icons right">send</i><span id=result></span>
+  							</button>
+					      </div>
+					  <ul class="collection" id="comment_results">
+					 	
+					  </ul>
+	            	</div>
+	            	</div>
+	            	</div>
+	            
+	            	{% endfor%}
+	    </body>
+{% endblock %}

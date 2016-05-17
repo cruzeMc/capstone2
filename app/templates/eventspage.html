@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+      
+      <link rel="stylesheet" href="/static/css/rating2.css">
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+      <style>
+        .row{
+              padding-left: 240px;
+            }
+
+        @media only screen and (max-width : 992px){
+          .row{
+                padding-left: 0px;
+              }
+              }
+              
+        	h6{font-family:cursive;font-weight:bold;text-transform:uppercase;}
+
+        .collapsible{background-color: teal;}
+        .side-nav{background-color: teal;}
+        .mdi-navigation-menu{background-color: teal;}
+        .nav-wrapper{background-color: teal;}
+        .card-content{background-color:teal;}
+        
+        
+      </style>
+      <title>Details</title>
+    </head>
+<!--hhhhhhhhhhhhhhhhhyhhhhhhhhghghghghghghghghghghghghghghghghghghghghghghghghghghg-->
+ <body>
+    <title>Details</title>
+<nav><!--this is all about the side bar--> 
+  <div class="nav-wrapper">
+    {% include "header.html" %}
+  <ul id="slide-out" class="side-nav fixed">
+  <form><ul>
+          <ul class="collapsible" data-collapsible="accordion">
+            <li>   
+              <div class="collapsible-header"><i class="material-icons"></i>Category</div>
+              <div class="collapsible-body">
+                  <p>
+                    <input class="with-gap" name="group1" type="radio" id="parties"  />
+                    <label for="parties">Parties</label>
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group1" type="radio" id="religious"  />
+                    <label for="religious">Religious</label>
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group1" type="radio" id="cultural"  />
+                    <label for="cultural">Cultural</label>
+                  </p>
+                    <p>
+                      <input class="with-gap" name="group1" type="radio" id="sports"  />
+                      <label for="sports">Sports</label>
+                  </p>
+                    <p>
+                      <input class="with-gap" name="group1" type="radio" id="AandE"  />
+                      <label for="AandE">Arts and Education</label>
+                  </p>
+                    <p>
+                      <input class="with-gap" name="group1" type="radio" id="food"  />
+                      <label for="food">Food</label>
+                  </p>
+              </div>
+            </li>
+
+         
+            <li>   
+              <div class="collapsible-header"><i class="material-icons"></i>Price</div>
+              <div class="collapsible-body">
+              <!--form action="#"-->
+                  <p>
+                    <input class="with-gap" name="group2" type="radio" id="free"  />
+                    <label for="free">Free</label>
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group2" type="radio" id="lessthangran"  />
+                    <label for="lessthangran">less than $500</label>
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group2" type="radio" id="fivetogran"  />
+                    <label for="fivetogran">$500-$1000</label>
+                  </p>  
+              </div>
+            </li>
+          
+            <li>   
+              <div class="collapsible-header"><i class="material-icons"></i>Date</div>
+              <div class="collapsible-body">
+              <!--form action="#"-->
+                  <p>
+                    <input class="with-gap" name="group3" type="radio" id="1week"  />
+                    <label for="1week">Within A Week</label>
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group3" type="radio" id="2week"  />
+                    <label for="2week">Within Two Weeks</label>
+                  </p>
+                  <p>
+                    <input class="with-gap" name="group3" type="radio" id="month"  />
+                    <label for="month">Within A Month</label>
+                  </p>
+                </div>
+              <!--/form-->
+            </li>
+          </ul>
+        </ul><!--this ul help to organize form data i think-->
+        <input type="submit">
+    </form>
+  </ul>
+  
+  <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+</nav> 
+</div><!--this is the end of the side bar-->   
+<!--gygygygygygygygygygygygygyggygyggygygygygygygygygygygygygygygygygygygygygygygyg-->
+
+<div class="row">
+  {% for evnt in elist %}
+			<div class="col s12 m4 l4" id="{{evnt.id}}">
+				<div class="card large">
+					<div class="card-image">
+						<a href="/details/{{evnt.id}}"><img src="/static/posters/{{evnt.poster}}"></a>
+						<!--<span class="card-title">{{evnt.eventname}}</span>-->
+					</div>
+					<div class="card-content">
+					  <h6>{{evnt.eventname}}</H6>
+						<p>{{evnt.date}}</p>
+						<p>{{evnt.start_time}}</p>
+						<p>Admission:{{evnt.admission}}</p>
+					</div>
+					<div class="card-action">
+						<!--<i class="material-icons">insert_chart</i>-->
+						<i class="material-icons"><div class="star-ratings-sprite"><span style="width:25%" class="star-ratings-sprite-rating"></span></div></i>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<i class="material-icoms">Views: {{ sum_page_count(evnt.id) }}<span id="{{evnt.venue}}" ></span></i>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<i class="material-icons">thumb_up</i>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<i class="material-icons orange600">thumb_down</i>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+      
+      <script type= "text/javascript">
+      $(".button-collapse").sideNav();
+      $('.collapsible').collapsible(
+        {accordian: false
+        });
+      </script>
+      
+    </body>
+</html>
+        
+ 

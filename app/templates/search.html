@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/static/css/custom.css">
+<link rel="stylesheet" href="/static/css/materialize.css">
+<link rel="stylesheet" href="/static/css/materialize.min.css">
+{% if events.count > 0 %}
+<div class="card" style="margin-top:0px;width:100%;">
+{% for event in events[:4] %}
+
+  <a href="{{ url_for('details',idnum=event.id)}}">
+   <div class="row">
+   <div class="col s5">
+    <div class="searchmg" style="margin-top:2px;margin-bottom:0px;"><img src="{{url_for('static', filename='posters/'+event.poster)}}"></div>
+    </div>
+     <div class="col s7" style="float:right;">
+    <div class="card-content">
+    <div class="card-title" style="font-size:18px;color:black;">{{event.eventname}}</div>
+    <div class="card-title" style="font-size:18px;color:black;">Price:${{event.admission}}</div>
+    </div>
+    </div>
+  </div></a>
+{% else %}
+None to Show
+{% endfor %}
+</div>
+{% endif %}

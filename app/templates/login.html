@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/p_pic.js') }}"></script>
+<div id="login-page" class="row" style="width:600px;height:100%;">
+  <div class="col s12 z-depth-6 card-panel">
+    
+      <div class="row">
+        <div class="input-field col s12 center">
+          <p class="center login-form-text">DREAMVENT - Login Form</p>
+          {% if err %}
+          <p class="center login-form-text" style="color:red;">{{err}}</p>
+          {% endif %}
+        </div>
+      </div>
+      <form action="{{url_for('login')}}" method="POST" enctype="multipart/form-data">
+       {{ form.hidden_tag() }}
+      <div class="row margin">
+        <div class="input-field col s6">
+          <div style="margin-bottom:30px;">
+            <div style="margin-bottom:20px;">
+            <i class="mdi-social-person-outline prefix"></i>
+            {{form.username(id="username",placeholder="Username")}}
+            {% for uname_error in form.username.errors %}
+              <li style="color:red;margin:left:20px;list-style-type:none;">{{ uname_error }}</li>
+            {% endfor %}
+          </div>
+          <i class="mdi-action-lock-outline prefix"></i>
+          {{form.password(placeholder="Password")}}
+          {% for pwd_error in form.password.errors %}
+            <li style="color:red;margin:left:20px;list-style-type:none;">{{ pwd_error }}</li>
+          {% endfor %}
+          </div>
+        </div>
+        <div class="input-field col s6">
+          <div id="p_image"><img src="{{url_for('static', filename='profile_pics/testing-mindfire-1.jpg')}}"></img></div>         
+          <div id="f_image"></div>
+        </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <button class="btn waves-effect waves-light" type="submit" name="action">Login</button>
+        </div>
+      </div>
+       </form>
+      <div class="row">
+        <div class="input-field col s6 m6 l6">
+          <p class="margin medium-small"><a href="{{url_for('signup')}}">Register Now!</a></p>
+        </div>
+        <div class="input-field col s6 m6 l6">
+            <p class="margin right-align medium-small"><a href="forgot-password.html">Forgot password?</a></p>
+        </div>          
+      </div>
+
+   
+  </div>
+</div>
+{% endblock %}

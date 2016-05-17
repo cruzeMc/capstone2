@@ -1,0 +1,15 @@
+{% if comments %}
+ {% for comment in comments %}
+<li class="collection-item avatar">
+	{% if getUsername(comment.users_id)[1] != " " %}
+  		<img src="{{url_for('static', filename='profile_pics/'+getUsername(comment.users_id)[1])}}" alt="" class="circle">
+  	{% else %}
+  		<i class="material-icons circle">account_circle</i>
+  	{% endif %}
+  <span class="title"><strong>{{getUsername(comment.users_id)[0]}}</strong></span>
+  <span style="margin-left:20%;">{{comment.timestamp.strftime("%I:%M%p on %B %d, %Y")}} {% if comment.status == 'neg' %}<i style="margin-left:25%" class="material-icons prefix">thumb_down</i>{% else %}<i style="margin-left:25%" class="material-icons prefix">thumb_up</i>{% endif %} <br>
+     {{comment.post}}
+  </span>
+</li>
+{% endfor %}
+{% endif %}

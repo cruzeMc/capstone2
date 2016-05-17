@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block additional %}
+	<script type="text/javascript" src="{{ url_for('static', filename='js/loading.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="/static/css/slider/slider1.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/slider/slider2.css">
+	<script type="text/javascript" src="{{ url_for('static', filename='js/slider/modernizr.custom.63321.js') }}"></script>
+{% endblock %}
+{% block body %}
+<div class="row">
+	{% if recommend %}
+	<div class="row">
+				<h1 style="margin-left:40%;font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">My Recommendations</h1>
+			</div>
+		<div id="mi-slider" class="mi-slider">
+			{% for cat in cat_list %}
+				<ul>
+					{% set count = 0 -%}
+					{% for list in recommend %}
+						{% if list.category==cat and list.days > 0 and count <=3 %}
+						{% set count = count+1 -%}
+						<li>
+							<div class="card hoverable small">
+								<div class="card-image">
+									<a href="/details/{{list.id}}"><img height="160px" src="/static/posters/{{ list.poster }}"></a>
+								</div>
+								<div class="card-content" style="width:100%">
+									<span class="card-title activator grey-text text-darken-4" style="font-size:15px;font-weight:bold;">{{ list.eventname }}<i class="material-icons right">more_vert</i></span></span>
+								</div>
+								<div class="card-reveal">
+							      <span class="card-title activator grey-text text-darken-4">{{list.eventname}}<i class="material-icons right">close</i></span>
+							      	<p style="float:left;">Starts : {{ list.start_time }} </p>
+									<p style="float:left;">Ends : {{ list.end_time }}</p>
+									<p style="float:left;">Venue : {{ list.venue }}</p>
+							    </div>
+							</div>
+						</li>
+						{% endif %}
+						
+					{% endfor %}
+					{% if count == 3 %}
+							{% set count = 0 %}
+						{% endif %}
+				</ul>
+			{% endfor %}
+			<nav>
+				{% for cats in category %}
+					{% for cat in cat_list %}
+						{% if cats.id == cat %}
+							<a href="#">{{cats.category_name}}</a>
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+			</nav>
+		</div>
+	{% endif %}
+<div class="myRecommendations" style="margin:30px;">
+<div class="row">
+<div class="row">
+	<h1 style="font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">Upcoming Events</h1>
+</div>
+{% if recommend %}
+	{% for list in recommend %}
+	{% if list.days > 0 %}
+		<div class="thumb" style="position: relative; width:240px;float:left;padding:20px;">
+			<div class="card hoverable small">
+				<div class="card-image">
+					<a href="/details/{{list.id}}"><img height="160px" src="/static/posters/{{ list.poster }}"></a>
+				</div>
+				<div class="card-content" style="width:100%">
+					<span class="card-title activator grey-text text-darken-4" style="font-size:15px;font-weight:bold;">{{ list.eventname }}<i class="material-icons right">more_vert</i></span></span>
+				</div>
+				<div class="card-reveal">
+			      <span class="card-title activator grey-text text-darken-4">{{list.eventname}}<i class="material-icons right">close</i></span>
+			      	<p style="float:left;">Starts : {{ list.start_time }} </p>
+					<p style="float:left;">Ends : {{ list.end_time }}</p>
+					<p style="float:left;">Venue : {{ list.venue }}</p>
+			    </div>
+				<div class="card-action">
+					<i class="small material-icons">query_builder</i><span class="time" style="margin-left:8px;">{{ list.days }}d {{list.hours}}{% if list.hours==1 %}hr{% else %}hrs{% endif %}</span>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+</div>
+<div class="row">
+	<h1 style="font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">Recent Events</h1>
+</div>
+{% if recommend %}
+	{% for list in recommend | sort(attribute='days', reverse=true)%}
+		{% if list.days < 0 %}
+		<div class="thumb" style="position: relative; width:240px;float:left;padding:20px;">
+			<a href="/details/{{list.id}}"><img height="140px;" style="z-index:444;bottom:35px;right:28px;position: absolute;" src="/static/content/ended.png"></a>
+		<div class="card hoverable small">
+			<div class="card-image">
+				<a href="/details/{{list.id}}"><img height="140px" src="/static/posters/{{ list.poster }}"></a>
+			</div>
+			<div class="card-content" style="width:100%">
+				<span class="card-title activator grey-text text-darken-4" style="font-size:15px;font-weight:bold;">{{ list.eventname }}<i class="material-icons right">more_vert</i></span></span>
+			</div>
+			<div class="card-reveal">
+		      <span class="card-title activator grey-text text-darken-4">{{list.eventname}}<i class="material-icons right">close</i></span>
+		      	<p style="float:left;">Starts : {{ list.start_time }} </p>
+				<p style="float:left;">Ends : {{ list.end_time }}</p>
+				<p style="float:left;">Venue : {{ list.venue }}</p>
+		    </div>
+				<div class="card-action">
+					<i class="small material-icons" style="color:red;">alarm_off</i>{{ (list.days|string).replace('-','')}}d {{list.hours}}{% if list.hours==1 %}hr{% else %}hrs{% endif %} ago
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='js/slider/jquery.catslider.js') }}"></script>
+<script>
+	$(function() {
+
+		$( '#mi-slider' ).catslider();
+
+	});
+</script>
+{% endblock %}

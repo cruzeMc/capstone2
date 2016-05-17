@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- <title{{ title }}></title> -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.12.1.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script>
+		
+		
+		<style>
+        #landing{
+              padding-left: 240px;
+            }
+      </style>
+		{% block additional %}
+		{% endblock %}
+	</head>
+	<body>
+	    {% if user()!="Guest" and user_role()=="USER" %}
+			<header>
+		    	{% include "header.html" %}
+		  	</header>
+	    {% endif %}
+	    {% if user()=="Guest" %}
+			<header>
+		    	{% include "header1.html" %}
+		  	</header>
+	    {% endif %}
+	    {% if user()!="Guest" and user_role()=="PROMOTER" %}
+			<header>
+		    	{% include "header2.html" %}
+		  	</header>
+	    {% endif %}
+		<div id="main" role="main">
+			{% block body %}
+			{% endblock %}
+		</div>
+		
+	    <footer>
+	    	{% include "footer.html" %}
+	    </footer>
+	    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.12.1.js') }}"></script>-->
+		
+		
+		<script type="text/javascript" src="{{ url_for('static', filename='js/login.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/search1.js') }}"></script>
+		<script type="text/javascript">
+        $(document).ready(function(){
+        	$('.modal-trigger').leanModal();
+        });
+    	</script>
+    </body>
+</html>

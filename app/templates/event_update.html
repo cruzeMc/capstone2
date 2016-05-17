@@ -1,0 +1,241 @@
+
+  <style>
+      #map {
+        width: auto;
+      }
+    </style>
+<!--  <script type="text/JavaScript">-->
+        
+<!--      $(document).ready(function() {-->
+<!--        $(window).keydown(function(event){-->
+<!--          if(event.keyCode == 13) {-->
+<!--            event.preventDefault();-->
+<!--            return false;-->
+<!--          }-->
+<!--        });-->
+<!--      });-->
+  
+<!--</script>-->
+<!--  <script type="text/javascript">-->
+<!--      var num = /^[0-9]+$/;-->
+<!--      function Validate(textarea2){-->
+<!--      if(textarea2.value.match(num)){-->
+<!--        alert("");-->
+<!--        }	else {-->
+<!--          alert("please enter a contact number")-->
+<!--          }-->
+<!--    	}-->
+<!--</script>-->
+  
+		
+	<link rel="stylesheet" type="text/css" href="/static/css/design.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  
+
+<form action="{{ url_for('update_event') }}"  method="POST" enctype="multipart/form-data">
+    <!--File upload-->
+    {{ form.hidden_tag() }}
+        <div class="row">
+        <div class="file-field input-field col l6 s12">
+          <div class="btn">
+            <span>POSTER</span>
+            {{form.poster(value=event.poster)}}
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text"placeholder="Upload poster">
+          </div>
+        </div>
+        
+      <div class="input-field col s12 l6">
+        <i class="material-icons prefix">assignment</i>
+        {{form.eventname(value=event.eventname)}}
+        <label for="eventname">Event Name</label>
+      </div>
+        </div>
+  <!--event type-->
+         <div class="row">
+              {{form.category(class="browser-default col s12 l6",value=event.category)}}
+        
+            <div class="input-field col s6">
+              <i class="material-icons prefix">event</i>
+                {{form.date(class="datepicker",type="date",value=event.date)}}
+            </div>
+        </div>
+  <!--time-->
+      <div class="row">
+        <div class="input-field col s12 l6">
+          <div style="float:left;">Start Time:</div>
+              {{form.start_time(type="time",value=event.start_time)}}
+        </div>
+        
+        <div class="input-field col s12 l6">
+          <div style="float:left">End Time:</div>
+              {{form.end_time(type="time",value=event.end_time)}}
+        </div>
+      </div>
+  <!--venue-->
+       <div class="row">
+          <div class="input-field col s12 l6">
+            <i class="material-icons prefix">domain</i>
+            <label for="pic-input">Venue</label>
+          </div>
+        <!--</div>-->
+        <!--<br><br>-->
+  <!--location-->
+          <!--<div class="row">-->
+            <div class="input-field col s12 l6">
+              <h5>Input Venue location In Search Box Below:</h5>
+              {{form.venue(id="pac-input",size="100",class="controls",type="text",placeholder="Search Box",value=event.venue)}}
+    
+    <div id="map"></div>
+    <script>
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: +"{{event.lat}}", lng: +"{{event.lng}}"},
+          zoom: 13,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+          codeAddress();
+        });
+      }
+      function codeAddress() {
+    geocoder = new google.maps.Geocoder();
+    var address = document.getElementById("pac-input").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+      document.getElementById("lat").value = results[0].geometry.location.lat();
+      document.getElementById("lng").value = results[0].geometry.location.lng();
+      alert("Latitude: "+results[0].geometry.location.lat());
+      alert("Langitude: "+results[0].geometry.location.lng());
+      } 
+
+      else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+
+
+        </script>
+    
+       
+
+   
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAucSUfxFiQtI4imzzPJXoCPfyn6P_9MAs&libraries=places&callback=initAutocomplete"
+         async defer>
+    </script>
+              {{form.lat(type="hidden",value=event.lat)}}
+              {{form.lng(type="hidden",value=event.lng)}}
+            </div>
+          </div>
+  <!--capacity-->
+            <div class="row">
+              <div class="input-field col s12 l6">
+                <i class="material-icons prefix">people</i>
+                {{form.capacity(type="number",value=event.capacity)}}
+                 
+                <label for="capacity">Venue Capacity</label>
+              </div>
+              
+          <div class="input-field col s12 l6">
+            <i class="material-icons prefix">payment</i>
+            {{form.admission(type="text",value=event.admission)}}
+            <label for="admission">Admission</label>
+          </div>
+        </div>
+  <!--Description-->
+          <div class="row">
+          <div class="input-field col s12 l6">
+            <i class="material-icons prefix">description</i>
+            {{form.description(type="text",id="textarea1", value=event.description)}}
+            <label for="textarea1">Event Description</label>
+          </div>
+          
+          <div class="input-field col s12 l6">
+            <i class="material-icons prefix">phone in talk</i>
+            {{form.contact(type="text",id="textarea2",value=event.contact,onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;", placeholder="Numbers Only")}}
+            <label for="textarea2">Promoter Contact</label>
+          </div>
+        </div>
+  <!--submit-->
+        <div class="row">
+          <button class="waves-effect waves-light btn-large" type="submit" name="action" style="float:right;">Submit
+            <i class="material-icons right">send</i>
+          </button>
+          <!--<div class="input-field col s12">-->
+          <!--  <p class="margin center medium-small sign-up">Already have an account? <a href="{{url_for('login')}}">Login</a></p>-->
+          <!--</div>-->
+        </div>
+        {{form.idnum(value=event.id,type="hidden")}}
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+  <script type="text/javascript">
+    $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15 // Creates a dropdown of 15 years to control year
+    });
+  </script>

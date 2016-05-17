@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block additional %}
+	<script type="text/javascript" src="/static/js/Chart.bundle.js"></script>
+	<script type="text/javascript" src="/static/js/getStats.js"></script>
+	<script type="text/javascript" src="/static/js/getWhatif.js"></script>
+	<script type="text/javascript" src="/static/js/editEvent.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function(){
+          var tocWrapperHeight = 31;
+          var tocHeight = $('#sticky').length ? $('#side-x').height() : 0;
+          var footerOffset = $('body > footer').first().length ? $('body > footer').first().offset().top : 0;
+          var bottomOffset = footerOffset - tocHeight - tocWrapperHeight;
+          
+        $('#sticky').pushpin({  top:$('#top-nav').height(), $bottom: bottomOffset });
+        });
+     </script>
+{% endblock %}
+{% block body %}
+<div class="details">
+    <div class="row">
+      	<div class="col s9 push-s3">
+      	    <div id="statistics">
+                <img id="pic" class="responsive-img" height="500px" style="margin-left:0px;margin-top:8px;width:100%;" src="/static/content/stats.jpg">
+            </div>
+            <div id="what_if_analysis">
+            </div>
+            <div id="editEvents">
+            </div>
+        </div>
+        <img id="loader" style="display:none; position: absolute;top: 50%;left: 60%;margin-top: -50px;margin-left: -50px;" src="/static/content/loader.gif" />
+        <div class="col s3 pull-s9 pinned" id="sticky">
+               <ul class="collapsible popout" data-collapsible="accordion">
+                <li>
+                  <div class="collapsible-header active"><i class="material-icons">timeline</i>Select an Event</div>
+                  <p>Select which event you would like to view</p>
+                </li>
+                </ul>
+                <div id="side-x" style="overflow-y: auto;height:350px;">
+                <ul class="collapsible popout" data-collapsible="accordion">
+                {% if events %}
+                    {% for event in events %}
+                        <li>
+                          <div class="collapsible-header"><i class="material-icons">equalizer</i>{{event.eventname}}</div>
+                          <div class="collapsible-body"><center><button id="getStats" value={{event.id}} class="btn waves-effect waves-purple">{{event.eventname}} Statistics</button></center></div>
+                          <div class="collapsible-body"><center><button id="getWhatif" value={{event.id}} class="btn waves-effect waves-purple">{{event.eventname}} What If</button></center></div>
+                          <div class="collapsible-body"><center><button id="editEvent" value={{event.id}} class="btn waves-effect waves-purple">Edit {{event.eventname}}</button></center></div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>
+                      <div class="collapsible-header"><i class="material-icons">warning</i>No Event</div>
+                      <a href="{{ url_for('newevent') }}" class="btn waves-effect waves-purple">Click here to create a new Event</a>
+                    </li>
+                {% endif %}
+              </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% include "layout.html" %}

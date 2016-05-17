@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div id="user-submit" class="normal-text" style="margin-left:10px;width:728px;">
+  <h3>Post your comment</h3>
+  <form method="POST" action="" name="frmOpin" id="frmOpin">
+    {{ form.hidden_tag() }}
+  	<fieldset id="udata-f">
+  	<label for="uname">Your <u>n</u>ickname (optional)</label>
+  	<input type="text" name="name" value="{{username}}"/>
+
+  	</fieldset>
+
+  	<fieldset id="ucomment-f">
+  	<label for="ucomment">Your <u>c</u>omment</label>
+  	{{form.post(id="upost")}}
+  	</fieldset>
+  	<button onclick="comment();">POST</button>
+	</form>
+</div>
+{% for comment in comments %}
+  <div>{{comment.id}} {{comment.post}} {{comment.timestamp}} {{comment.percentage}} {{comment.status}}</div>
+{% endfor %}
+
+{% endblock %}
+

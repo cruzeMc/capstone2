@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% block additional %}
+    <script type="text/javascript" src="/static/js/switch.js"></script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <input id="user_id" type="hidden" value={{users.id}}>
+    <ul class="collapsible popout" data-collapsible="accordion">
+        <li>
+        <div class="collapsible-header"><i class="material-icons">credit_card</i>Turn on or off Promoter mode</div>
+        <div class="collapsible-body">
+            <div class="row">
+               <label style="margin-left:5%;">{%if users.urole=="PROMOTER" %}Turn on Promoter Mode{%else%}Turn on Promoter Mode{%endif%}</label>
+               <div class="switch" style="margin-left:10%;"><label>Off<input type="checkbox" name="aswitch" value="checked" id="aswitch" {%if users.urole=="PROMOTER" %}checked{%endif%}><span class="lever"></span>On</label></div> 
+            </div>     
+        </div>
+        </li>
+        <li>
+            <div class="collapsible-header"><i class="material-icons">credit_card</i>Add Payment Option</div>
+            <div class="collapsible-body">
+                <center><a href="{{ url_for('add_payment') }}" class="btn waves-effect waves-purple">Click here to be redirected to the page to add a payment option</a></center>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header active"><i class="material-icons">history</i>Check History</div>
+            <div>
+                <table>
+                    <thead>
+                        <tr class="red lighten-2">
+                            <th>Event</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set q = [] %}
+                        {% for j in history %}
+                            {% do q.append(j.price*j.quantity) %}
+                        {% endfor %}
+                        
+                        {% for k in range(event|length) %}
+                        <tr>
+                            {% for z in range(history|length) %}
+                                {% if history[z].event_id == event[k].id %}
+                                <td>{{ event[k].eventname }}</td>
+                                <td>{{ history[z].quantity }}</td>
+                                <td>{{ history[z].price }}</td>
+                                <td>{{ history[z].quantity*history[z].price }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        
+                        <tr class="red lighten-2">
+                            <th>Total</th>
+                            <th>{{ history|sum(attribute='quantity') }}</th>
+                            <th>{{ history|sum(attribute='price') }}</th>
+                            <th>{{ q|sum }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header"><i class="material-icons">credit_card</i>Event Statistics</div>
+            <div class="collapsible-body">
+                <center><a href="/statistics" class="btn waves-effect waves-purple">View event statistics</a></center>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header active"><i class="material-icons">perm_identity</i>Update Profile Information</div>
+            <div class="collapsible-body">
+                <form action="{{ url_for('account') }}" method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <!--<div class="container">-->
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Profile Picture:</h5>
+                            </div>
+                            <div class="col s3">
+                                <!--<div class="chip">-->
+                                    <img class="circle responsive-img" src="/static/profile_pics/{{ users.pic }}"></img>
+                                <!--</div>-->
+                            </div>
+                            <div class="col s5">
+                                <div class="file-field input-field">
+                                    <div class="btn">
+                                        <span>Profile Picture</span>
+                                        <span>{{ form.profile_pic(class="validate") }}</span>
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Username:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.usersname }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.username(class="validate") }}
+                                    {{ form.username.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>First Name:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.first_name }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.first_name(class="validate") }}
+                                    {{ form.first_name.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Last Name:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.last_name }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.last_name(class="validate") }}
+                                    {{ form.last_name.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Email:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.email }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.email(class="validate") }}
+                                    {{ form.email.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Password:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.confirm }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.password(class="validate") }}
+                                    {{ form.password.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Confirm Password:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.confirm }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.confirm(class="validate") }}
+                                    {{ form.confirm.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Address:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.address }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.address(class="validate") }}
+                                    {{ form.address.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Age:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.age }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.age(class="datepicker") }}
+                                    {{ form.age.label }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s3 center">
+                                <h5>Sex:</h5>
+                            </div>
+                            <div class="col s3">
+                                <h6>{{ users.sex }}</h6>
+                            </div>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    {{ form.sex(class="validate") }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="row">
+                            <div class="col s12 center">
+                               <button class="btn waves-effect waves-white" type="submit" name="action">
+                                   Update<i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                    <!--</div>-->
+                </form>
+            </div>
+        </li>
+    </ul>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+<script type="text/javascript">
+  $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 100 // Creates a dropdown of 15 years to control year
+  });
+</script>
+{% endblock %}
+{% include "layout.html" %}

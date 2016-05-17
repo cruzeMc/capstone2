@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block body %}
+<main>
+    <h4>Purchase Ticket(s) for {{ event.eventname }}</h4>
+    <ul class="collapsible" data-collapsible="accordion">
+        <li>
+            <div class="collapsible-header"><i class="material-icons">whatshot</i>Stored Payment Card</div>
+            <div class="collapsible-body">
+                <div class="row">
+                    <form action="{{ url_for('payment') }}" method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                          					
+                        <div class="row col s9">
+                            <div class="input-field">
+                          	{% for j in card_lst %}
+                                <input name="card_num" type="radio" id="{{ j.id }}" value="{{ j.id }}" />
+                                <label for="{{ j.id }}">{{ j.id }}</label>
+                            {% endfor %}
+                            {% for cardNum_error in form.card_num.errors %}
+                                <li style="color:red;margin:left:20px;list-style-type:none;">{{ cardNum_error }}</li>
+                            {% endfor %}
+                          	</div>
+                        </div>
+                        
+                          					
+                        <div class="row col s9">
+                            <div class="input-field">
+                        	{{ form.event_num(class="validate", type="hidden", value=event.id) }}
+                        	{% for event_num_error in form.event_num.errors %}
+                                <li style="color:red;margin:left:20px;list-style-type:none;">{{ event_num_error }}</li>
+                            {% endfor %}
+                            </div>
+                        </div>
+                          					
+                        <div class="row col s9 center">
+                            <div class="input-field">
+                          	{{ form.qty(class="validate", type="number", value="1") }}
+                          	{{ form.qty.label }}
+                          	{% for qty_error in form.qty.errors %}
+                                <li style="color:red;margin:left:20px;list-style-type:none;">{{ qty_error }}</li>
+                            {% endfor %}
+                          	</div>
+                        </div>
+                        
+                        <div class="row col s9">
+                            <div class="input-field">
+                                 <button class="btn waves-effect waves-light" type="submit" name="action">Purchase Now</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+</main>
+{% endblock %}

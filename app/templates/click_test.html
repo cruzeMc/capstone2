@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block body %}
+    <body>
+        <div class="row">
+        {% for evnt in elist %}
+			<div class="col s12 m4 l4">
+				<div class="card large">
+					<div class="card-image">
+					    <img src="/static/{{evnt.poster}}">
+						<!--<span class="card-title">{{evnt.eventname}}</span>-->
+			        </div>
+					<div class="card-content">
+					  <H6>{{evnt.eventname}}</H6>
+						<p>{{evnt.date}}</p>
+						<p>{{evnt.start_time}}</p>
+						<p>{{evnt.venue}}</p>
+					</div>
+					<div class="card-action">
+						<i class="material-icons orange600">thumb_up</i>
+						<i class="material-icons">thumb_down</i>
+						<i class="material-icons">insert_chart</i>
+						<i class="material-icons"><div class="star-ratings-sprite"><span style="width:30%" class="rating"></span></div></i>
+						
+					</div>
+			    </div>
+			</div>
+		{% endfor %}
+		</div>
+        
+        <button id="viewCount" onclick="counter()">Test</button>
+        <p>This was viewed <span id="displayCount">0</span> times</p>
+
+        </script>
+        <script type="text/javascript">
+            var count = 0;
+            var button = document.getElementById("viewCount");
+            var display = document.getElementById("displayCount");
+            
+            button.onclick = function(){
+                count++;
+                display.innerHTML = count;
+            }
+        </script>
+    </body>
+{% endblock %}

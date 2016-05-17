@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row" style="width:900px;">
+    <div class="col s12 z-depth-5 card-panel" >
+        <div class="landing" style="float:left;margin-left:150px;">
+        {% for i in lst[:3] %}
+            <div class="col s12 m6 l3">
+                <div class="card-panel hoverable">
+                    <a href="/events/{{ i.id  }}"><img src="{{ i.image }}" alt="" class="circle responsive-img"></a>
+                    <span class="card-title">{{ i.category_name }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+   
+        <div class="landing" style="float:left;margin-left:150px;">
+        {% for i in lst[3:6] %}
+            <div class="col s12 m6 l3">
+                <div class="card-panel hoverable">
+                    <a href="/events/{{ i.id  }}"><img src="{{ i.image }}" alt="" class="circle responsive-img"></a>
+                    <span class="card-title">{{ i.category_name }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        
+        <div class="landing" style="float:left;margin-left:150px;">
+        {% for i in lst[6:] %}
+            <div class="col s12 m6 l3">
+                <div class="card-panel hoverable">
+                    <a href="/events/{{ i.id  }}"><img src="{{ i.image }}" alt="" class="circle responsive-img"></a>
+                    <span class="card-title">{{ i.category_name }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

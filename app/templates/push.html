@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+  {% block additional %}
+    <script type="text/javascript" src="/static/js/pushpin.js"></script>
+  	<!--<link rel="stylesheet" type="text/css" href="/static/css/rating.css">-->
+  	<link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+  	<script type="text/javascript" src="{{ url_for('static', filename='js/comments.js') }}"></script>
+  	<script type="text/javascript" src="{{ url_for('static', filename='js/commentz.js') }}"></script>
+  	<script type="text/javascript" src="{{ url_for('static', filename='js/load.js') }}"></script>
+  	<script type="text/javascript" src="{{ url_for('static', filename='js/page_hits.js') }}"></script>
+   	
+   	<script type="text/javascript" src="/static/js/script.js"></script>
+   	<link rel="stylesheet" type="text/css" href="/static/css/design.css">
+   	
+   	<style>
+        #map {
+          width: 100%;
+        }
+      </style>
+  {% endblock %}
+{% block body %}
+<div class="details">
+  <div class="row">
+    <div class="col s7 push-s5">
+  			<span>
+  				<img class="materialboxed" height="500px" style="margin-left:0px;width:100%;" src="/static/posters/{{event.poster}}">
+				<h1 style="font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">{{event.eventname}} Details</h1>
+  				<ul class="collapsible" style="width:500;" data-collapsible="accordion">
+				    {% if event.date %}
+				    <li>
+				      <div class="collapsible-header"><i class="material-icons">today</i>Date</div>
+				    	<div class="collapsible-body">
+				      	<center>
+							<script language="javascript" type="text/javascript">
+							var day_of_week = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+							var month_of_year = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+							
+							//  DECLARE AND INITIALIZE VARIABLES
+							var Calendar = new Date("{{event.date|safe}}");
+							
+							var year = Calendar.getFullYear();     // Returns year
+							var month = Calendar.getMonth();    // Returns month (0-11)
+							var today = Calendar.getDate();    // Returns day (1-31)
+							var weekday = Calendar.getDay();    // Returns day (1-31)
+							
+							var DAYS_OF_WEEK = 7;    // "constant" for number of days in a week
+							var DAYS_OF_MONTH = 31;    // "constant" for number of days in a month
+							var cal;    // Used for printing
+							
+							Calendar.setDate(1);    // Start the calendar day at '1'
+							Calendar.setMonth(month);    // Start the calendar month at now
+							
+							
+							/* VARIABLES FOR FORMATTING
+							NOTE: You can format the 'BORDER', 'BGCOLOR', 'CELLPADDING', 'BORDERCOLOR'
+							      tags to customize your caledanr's look. */
+							
+							var TR_start = '<TR>';
+							var TR_end = '</TR>';
+							var highlight_start = '<TD WIDTH="30"><TABLE CELLSPACING=0 BORDER=1 BGCOLOR=DEDEFF BORDERCOLOR=CCCCCC><TR><TD WIDTH=20><B><CENTER>';
+							var highlight_end   = '</CENTER></TD></TR></TABLE></B>';
+							var TD_start = '<TD WIDTH="30"><CENTER>';
+							var TD_end = '</CENTER></TD>';
+							
+							/* BEGIN CODE FOR CALENDAR
+							NOTE: You can format the 'BORDER', 'BGCOLOR', 'CELLPADDING', 'BORDERCOLOR'
+							tags to customize your calendar's look.*/
+							
+							cal =  '<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BORDERCOLOR=BBBBBB><TR><TD>';
+							cal += '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2>' + TR_start;
+							cal += '<TD COLSPAN="' + DAYS_OF_WEEK + '" BGCOLOR="#EFEFEF"><CENTER><B>';
+							cal += month_of_year[month]  + '   ' + year + '</B>' + TD_end + TR_end;
+							cal += TR_start;
+							
+							//   DO NOT EDIT BELOW THIS POINT  //
+							
+							// LOOPS FOR EACH DAY OF WEEK
+							for(index=0; index < DAYS_OF_WEEK; index++)
+							{
+							
+							// BOLD TODAY'S DAY OF WEEK
+							if(weekday == index)
+							cal += TD_start + '<B>' + day_of_week[index] + '</B>' + TD_end;
+							
+							// PRINTS DAY
+							else
+							cal += TD_start + day_of_week[index] + TD_end;
+							}
+							
+							cal += TD_end + TR_end;
+							cal += TR_start;
+							
+							// FILL IN BLANK GAPS UNTIL TODAY'S DAY
+							for(index=0; index < Calendar.getDay(); index++)
+							cal += TD_start + '  ' + TD_end;
+							
+							// LOOPS FOR EACH DAY IN CALENDAR
+							for(index=0; index < DAYS_OF_MONTH; index++)
+							{
+							if( Calendar.getDate() > index )
+							{
+							  // RETURNS THE NEXT DAY TO PRINT
+							  week_day =Calendar.getDay();
+							
+							  // START NEW ROW FOR FIRST DAY OF WEEK
+							  if(week_day == 0)
+							  cal += TR_start;
+							
+							  if(week_day != DAYS_OF_WEEK)
+							  {
+							
+							  // SET VARIABLE INSIDE LOOP FOR INCREMENTING PURPOSES
+							  var day  = Calendar.getDate();
+							
+							  // HIGHLIGHT TODAY'S DATE
+							  if( today==Calendar.getDate() )
+							  cal += highlight_start + day + highlight_end + TD_end;
+							
+							  // PRINTS DAY
+							  else
+							  cal += TD_start + day + TD_end;
+							  }
+							
+							  // END ROW FOR LAST DAY OF WEEK
+							  if(week_day == DAYS_OF_WEEK)
+							  cal += TR_end;
+							  }
+							
+							  // INCREMENTS UNTIL END OF THE MONTH
+							  Calendar.setDate(Calendar.getDate()+1);
+							
+							}// end for loop
+							
+							cal += '</TD></TR></TABLE></TABLE>';
+							
+							//  PRINT CALENDAR
+							document.write(cal);
+							
+							//  End -->
+							</script>
+						</center>
+						</div>
+				    </li>
+				    {% endif %}
+				    {% if event.start_time or event.end_time %}
+				    <li>
+				      <div class="collapsible-header"><i class="material-icons">query_builder</i>Time</div>
+				    	<div class="collapsible-body">
+				      	{% if event.start_time %}
+					      <p style="font-family: 'Orbitron', sans-serif;">Starts At : {{event.start_time}}</p>
+					    {% endif %}
+					    {% if event.end_time %}
+					      <p style="font-family: 'Orbitron', sans-serif;">Ends At : {{event.end_time}}</p>
+					    {% endif %}
+					    </div>
+				    </li>
+				    {% endif %}
+				    {% if event.venue %}
+				    <li>
+						<div class="collapsible-header"><i class="material-icons">location_on</i>Avenue</div>
+						    <div id="map"></div>
+						    <script>
+						      var myLat = +'{{event.lat}}';
+						      var myLng = +'{{event.lng}}';
+						      function initMap() {
+						        var myLatLng = {lat: myLat, lng: myLng};
+						
+						        var map = new google.maps.Map(document.getElementById('map'), {
+						          zoom: 16,
+						          center: myLatLng
+						        });
+						
+						        var marker = new google.maps.Marker({
+						          position: myLatLng,
+						          map: map,
+						          title: '{{event.venue}}'
+						        });
+						      }
+						    </script>
+			              	<script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+    async defer></script>
+				    </li>
+				    {% endif %}
+				    {% if event.admission %}
+				    <li>
+				      <div class="collapsible-header"><i class="material-icons">credit_card</i>Admisson</div>
+				      <div class="collapsible-body"><p>${{event.admission}}</p></div>
+				    </li>
+				    {% endif %}
+				    {% if event.description %}
+				    <li>
+				      <div class="collapsible-header"><i class="material-icons">library_books</i>Description</div>
+				      <div class="collapsible-body"><p>{{event.description}}</p></div>
+				    </li>
+				    {% endif %}
+				    {% if event.creator %}
+				    <li>
+				      <div class="collapsible-header"><i class="material-icons">call</i>Contact</div>
+				      <div class="collapsible-body">
+				      	{% for user in users %}
+				      		{% if user.id==event.creator %}
+				      			<p>Promoter : {{user.first_name}} {{user.first_name}}</p>
+				      			<p>Email : {{user.email}}</p>
+				      		{% endif %}
+				      	{% endfor %}
+				      </div>
+				    </li>
+				    {% endif %}
+				 </ul>
+  				  <div class="carousel">
+				    <a class="carousel-item" href="#one!"><img src="http://lorempixel.com/250/250/nature/1"></a>
+				    <a class="carousel-item" href="#two!"><img src="http://lorempixel.com/250/250/nature/2"></a>
+				    <a class="carousel-item" href="#three!"><img src="http://lorempixel.com/250/250/nature/3"></a>
+				    <a class="carousel-item" href="#four!"><img src="http://lorempixel.com/250/250/nature/4"></a>
+				    <a class="carousel-item" href="#five!"><img src="http://lorempixel.com/250/250/nature/5"></a>
+				  </div>
+  			</span>
+  		</div>
+    
+    <div class="col s5 pull-s7 pinned" id="sticky">
+  			<div id="side-x">
+  				<div class="comment_box" style="position:relative;overflow-y: auto;height:350px;">
+  					<ul class="collection" id="comment_results"></ul>
+  				</div>
+        		<div class="row" style="position:absolute;">
+        			<div class="col s12 m4 l8">
+			      		<div class="row">
+			        		<div class="input-field col s12">
+			          			<i class="material-icons prefix">account_circle</i>
+			          			<input id="icon_prefix" name=a type="text" style="width:250px;" value="{{user.usersname}}" class="validate">
+  					  			<label for="icon_prefix">Username</label>
+  							</div>
+  							<div class="input-field col s12">
+			          			<i class="material-icons prefix">comment</i>
+			          			<input type="hidden" name=c value={{event_id}}>
+			          			<input type="hidden" name=d value={{user_id}}>
+			          			<textarea id="icon_prefix2" name=b class="materialize-textarea"></textarea>
+			          			<label for="textarea1">Comment</label>
+			        		</div>
+			        		<button style="float:right;" class="btn waves-effect waves-light" type="submit" id="upost">POST
+								<i class="material-icons right">send</i><span id=result></span>
+  							</button>
+			      		</div>
+  					</div>
+				</div>
+			</span>
+		</div>
+	</div>
+    
+  </div><!-- .row -->
+</div><!-- .container -->
+
+<script type="text/javascript">
+ 	$(document).ready(function(){
+       $('.carousel').carousel();
+     });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+<script type="text/javascript">
+    $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+  });
+ </script>
+{% endblock %}
+{% include "layout.html" %}

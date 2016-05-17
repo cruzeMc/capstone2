@@ -1,0 +1,38 @@
+    turnout = intercept + A(views) + B(ratings)<br>
+    Intercept = {{ intercept }}<br>
+    A = {{ coefficient[0]|abs }}<br>
+    B = {{ coefficient[1]|abs }}<br>
+    
+    <div class="row">
+        <!--<form action="" id="what_if" onsubmit="return false;" class="col s12">-->
+            <div class="row">
+                <div class="input-field col s3">
+                    <a class="btn tooltipped" data-position="top" data-delay="50" data-tooltip="Here" onclick="myFunction();">Turnout<span id="turnout"></span></a>
+                    <input type="hidden" name="intercept" id="intercept" value="{{ intercept }}"/>
+                </div>
+                <div class="input-field col s3">
+                    <input type="hidden" name="a" id="a" value="{{ coefficient[0] }}"/>
+                    <input type="number" name="views" id="views" value="0"/>
+                    <label for="views">Views</label>
+                </div>
+                <div class="input-field col s3">
+                    <input type="hidden" name="a" id="b" value="{{ coefficient[0] }}"/>
+                    <input type="number" name="ratings" id="ratings" max="5" value="0"/>
+                    <label for="ratings">Ratings</label>
+                </div>
+            </div>
+        <!--</form>-->
+    </div>
+    <script type="text/javascript">
+        function myFunction(){
+            intercept = parseFloat(document.getElementById("intercept").value);
+            a = parseFloat(document.getElementById("a").value);
+            views = parseFloat(document.getElementById("views").value);
+            b = parseFloat(document.getElementById("b").value);
+            ratings = parseFloat(document.getElementById("ratings").value);
+                
+            turnout = Math.abs(intercept) + Math.abs(a*views) + Math.abs(b*ratings);
+            alert(turnout);
+            // document.getElementById("turnout").innerHTML=turnout;
+        }
+    </script>

@@ -1,0 +1,141 @@
+<script type="text/javascript" src="/static/js/getWhatif.js"></script>
+<script type="text/javascript" src="/static/js/editEvent.js"></script>
+<div class="row">
+    <div class="m12 s12 col">    
+        <div class="card-panel red darken-2" id="bar" style="width:100%;">
+                    <div class="row">
+                        <div class="col l8 white-text">
+                            <h5>{{event.eventname}}</h5>
+                            <h6>Statistics</h6>
+                        </div>
+                        <div class="col l4 right-align">
+                            <br>
+                                <a href="{{url_for('details', idnum=event.id)}}" class="waves-effect waves-light btn btn-large white orange-text btn-flat">Edit Event</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <div class="card">
+                    <div class="card-content red-text text-lighten-2">
+                        <span class="card-title">Likes</span>
+                        <canvas id="pieChart" width="300" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="col s6">
+                <div class="card">
+                    <div class="card-content red-text text-lighten-2">
+                        <span class="card-title">Comments</span>
+                        <canvas id="myDoughnutChart" width="300" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content red-text text-lighten-2">
+                        <span class="card-title">Views</span>
+                        <canvas id="lineChart" width="300" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+                
+                
+        
+        <script type="text/javascript">
+            var ctx = document.getElementById("pieChart");
+            var ctxx = document.getElementById("lineChart");
+            var ctxxx = document.getElementById("myDoughnutChart");
+            
+        
+            var pieData = {
+                    labels: ["5 star", "4 star", "3 star", "2 star", "1 star"],
+                    datasets: [{
+                        label: '# of votes',
+                        data: {{ratings|safe}},
+                        backgroundColor: [
+                            "#FF6384",
+                            "#4BC0C0",
+                            "#FFCE56",
+                            "#E7E9ED",
+                            "#36A2EB"
+                        ]
+                    }],
+                    
+                }
+            var pieChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: pieData,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+            var lineData = {
+                    labels: {{days|safe}},
+                    datasets: [{
+                        label: '# of views per day',
+                        data: {{visits|safe}},
+                        backgroundColor: "#EE6E73"
+                    }]
+                }
+            var lineChart = new Chart(ctxx, {
+                type: 'line',
+                data: lineData,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+            var data = {
+                labels: ["Neutral", "Negative", "Positive"],
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        backgroundColor: "rgba(255,99,132,0.2)",
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB"
+                        ],
+                        borderWidth: 1,
+                        hoverBackgroundColor: [
+                            "#FF6384",
+                            "#36A2EB"
+                        ],
+                        hoverBorderColor: "rgba(255,99,132,1)",
+                        data: {{comments|safe}},
+                    }
+                ]
+            };
+            var myDoughnutChart = new Chart(ctxxx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    elements: {
+                        arc: {
+                            borderColor: "#000000"
+                        }
+                    }
+                }
+            });
+        </script>
+
+{% include "layout.html" %}

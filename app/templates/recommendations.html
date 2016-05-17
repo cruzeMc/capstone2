@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block body %}
+<link rel="stylesheet" type="text/css" href="/static/css/slider/slider1.css">
+<link rel="stylesheet" type="text/css" href="/static/css/slider/slider2.css">
+<script type="text/javascript" src="{{ url_for('static', filename='js/slider/modernizr.custom.63321.js') }}"></script>
+<div class="container">
+	{% if recommend %}	
+		<div id="mi-slider" class="mi-slider">
+			{% for cat in category %}
+				<ul>
+					{% for list in recommend %}
+						{% if list.category==cat.id and list.days>0 %}
+						<li>
+								<span></span><div class="card"> 
+									<div class="card-image">
+										<a href="/details/{{list.id}}"><img height="190px" src="/static/posters/{{ list.poster }}"></a>
+									</div>
+									<div class="card-content">
+										<p class="card-title">{{ list.eventname }}</p>
+										<p>Days {{ list.days }} hours {{list.hours}}</p>
+										<!--<p>{{ list.start_time }} TO {{ list.end_time }}</p>-->
+										<!--<p>{{ list.venue }}</p>-->
+									</div>
+								</div>
+						</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			{% endfor %}
+			<nav>
+				{% for cats in cat_list %}
+				<a href="#">{{cats}}</a>
+				{% endfor %}
+			</nav>
+		</div>
+	</div>
+	{% endif %}
+	{% if recommend %}
+		{% for list in recommend %}
+			<div class="thumb" style="width:240px;float:left;padding:20px;">
+				<div class="card small">
+					<div class="card-image">
+						<a href="/details/{{list.id}}"><img height="140px" src="/static/posters/{{ list.poster }}"></a>
+					</div>
+					<div class="card-content">
+									<p class="card-title">{{ list.eventname }}</p>
+									<!--<p>{{ list.days }}d and {{list.hours}}hrs</p>-->
+									<!--<p>{{ list.start_time }} TO {{ list.end_time }}</p>-->
+									<!--<p>{{ list.venue }}</p>-->
+								</div>
+					<div class="card-action">
+						<i class="small material-icons">query_builder</i>{{ list.days }}d {{list.hours}}hrs
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/slider/jquery.catslider.js') }}"></script>
+<script>
+	$(function() {
+
+		$( '#mi-slider' ).catslider();
+
+	});
+</script>
+{% endblock %}

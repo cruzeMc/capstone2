@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block body %}
+  <div id="login-page" class="row" style=width:800px;>
+  <div class="col s12 z-depth-6 card-panel">
+      <div class="row">
+        <div class="input-field col s12 center">
+          <p class="center login-form-text">DREAMVENT - Registration Form</p>
+        </div>
+      </div>
+      <form action="{{url_for('signup')}}" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="row margin">
+          <div class="file-field input-field col l6 s12">
+            <div class="btn">
+              <span>PHOTO</span>
+              {{form.profile_pic}}
+              {% for pic_error in form.profile_pic.errors %}
+                <li style="color:red;margin:left:20px;list-style-type:none;">{{ pic_error }}</li>
+              {% endfor %}
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" name="file_name" type="text"placeholder="Upload Photo">
+            </div>
+          </div>
+        </div>
+        <div class="row margin">
+      <div class="input-field col s6">
+        <i class="material-icons prefix">account_circle</i>
+        {{form.first_name}}
+        {% for fname_error in form.first_name.errors %}
+          <li style="color:red;margin:left:20px;list-style-type:none;">{{ fname_error }}</li>
+        {% endfor %}
+        <label for="first_name">First Name</label>
+      </div>
+      <div class="input-field col s6">
+        <i class="material-icons prefix">account_circle</i>
+        {{form.last_name}}
+        {% for lname_error in form.last_name.errors %}
+          <li style="color:red;margin:left:20px;list-style-type:none;">{{ lname_error }}</li>
+        {% endfor %}
+        <label for="last_name">Last Name</label>
+      </div>
+    </div>
+      <div class="row margin">
+        <div class="input-field col s6">
+          <i class="mdi-social-person-outline prefix"></i>
+          {{form.username}}
+          {% for uname_error in form.username.errors %}
+             <li style="color:red;margin:left:20px;list-style-type:none;">{{ uname_error }}</li>
+            {% endfor %}
+          <label for="username" class="center-align">Username</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="mdi-communication-email prefix"></i>
+          {{form.email}}
+          {% for email_error in form.email.errors %}
+            <li style="color:red;margin:left:20px;list-style-type:none;">{{ email_error }}</li>
+          {% endfor %}
+          <label for="email" class="center-align">Email</label>
+        </div>
+      </div>
+      <div class="row margin">
+        <div class="input-field col s12">
+          <i class="mdi-action-lock-outline prefix"></i>
+          {{form.password}}
+          {% for pwd_error in form.password.errors %}
+            <li style="color:red;margin:left:20px;list-style-type:none;">{{ pwd_error }}</li>
+          {% endfor %}
+          <label for="password">Password</label>
+        </div>
+        <div class="input-field col s12">
+          <i class="mdi-action-lock-outline prefix"></i>
+          {{form.confirm}}
+          {% for confirm_error in form.confirm.errors %}
+            <li style="color:red;margin:left:20px;list-style-type:none;">{{ confirm_error }}</li>
+          {% endfor %}
+          <label for="password-again">Re-type password</label>
+        </div>
+      </div>
+      <div class="row margin">
+      <div class="input-field col s6">
+        <i class="material-icons prefix">mode_edit</i>
+        {{form.address}}
+        {% for addr_error in form.address.errors %}
+          <li style="color:red;margin:left:20px;list-style-type:none;">{{ addr_error }}</li>
+        {% endfor %}
+        <label for="address">Address</label>
+      </div>
+      <div class="row margin">
+      <div class="input-field col s6">
+        {{form.age(class="datepicker")}}
+        {% for age_error in form.age.errors %}
+          <li style="color:red;margin:left:20px;list-style-type:none;">{{ age_error }}</li>
+        {% endfor %}
+        <label for="age">Birthdate</label>
+      </div>
+      </div>
+      <div class="row margin">
+      <div class="input-field col s6">
+        {{form.utype(class="browser-default validate")}}
+        {% for type_error in form.utype.errors %}
+          <li style="color:red;margin:left:20px;list-style-type:none;">{{ type_error }}</li>
+        {% endfor %}
+       </div>
+      </div>
+      <div class="row margin">
+      <div class="input-field col s6">
+        {{form.sex}}
+        {% for sex_error in form.sex.errors %}
+          <li style="color:red;margin:left:20px;list-style-type:none;">{{ sex_error }}</li>
+        {% endfor %}
+        <label for="male">Sex</label>
+       </div>
+      </div>
+    </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <button class="btn waves-effect waves-light col s12" type="submit" name="action">Register Now</a>
+      </div>
+      </form>
+        <div class="input-field col s12">
+          <p class="margin center medium-small sign-up">Already have an account? <a href="{{url_for('login')}}">Login</a></p>
+        </div>
+      </div>
+  </div>
+</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+  <script type="text/javascript">
+    $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 100 // Creates a dropdown of 15 years to control year
+    });
+</script>
+{% endblock %}
+
+    
