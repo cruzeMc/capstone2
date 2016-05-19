@@ -20,6 +20,7 @@ $(function() {
               $("#loader").hide();
               $('#pic').hide();
               $('#what_if_analysis').hide();
+              $('#viewPurchase').hide();
               $('#statistics').hide();
               $('#editEvents').show
         },

@@ -1,0 +1,8 @@
+{% if u_list %}
+    {% for list in u_list %}
+        <h3>{{list.first_name list.last_name}} purchased {{list.quantity}} tickets</h3>
+    {% endfor %}
+{% else %}
+<h3>There are no purchases for this event as yet.</h3>
+{% endif %}
+{% include "layout.html" %}

@@ -84,7 +84,7 @@ class SignupForm(Form):
   age = TextField('Age', validators=[DataRequired()])
   profile_pic = FileField('Profile Picture', validators=[FileRequired()])
   sex = RadioField('Sex', choices=[('Male','Male'), ('Female', 'Female')], validators=[InputRequired()])
-  utype = SelectField('Account Type', choices=[("","Select Account Type"),("USERS","User"),("PROMOTER","Promoter")], validators=[validators.Required(message='Please Select an account Type')])
+  utype = SelectField('Account Type', choices=[("","Select Account Type"),("USER","User"),("PROMOTER","Promoter")], validators=[validators.Required(message='Please Select an account Type')])
 
   def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

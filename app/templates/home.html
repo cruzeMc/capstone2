@@ -55,10 +55,10 @@
 	{% endif %}
 <div class="myRecommendations" style="margin:30px;">
 <div class="row">
+{% if recommendings %}
 <div class="row">
 	<h1 style="font-family: Copperplate, 'Copperplate Gothic Light', fantasy;font-size: 24px;font-style: normal;font-variant: normal;font-weight: 500;line-height: 15.4px;">Recommended events for you</h1>
 </div>
-{% if recommendings %}
 	{% for lists in recommendings %}
 	{% if lists.days > 0 %}
 		<div class="thumb" style="position: relative; width:240px;float:left;padding:20px;">

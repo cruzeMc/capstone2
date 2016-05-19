@@ -34,6 +34,8 @@ $(function() {
                 
                 $('#pic').hide();
                 $('#statistics').hide();
+                $('#editEvents').hide();
+                $('#viewPurchase').hide();
                 $('#what_if_analysis').show();
         },
         success: function(data){

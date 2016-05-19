@@ -1,8 +1,8 @@
 $(function() {
-  $('button#getStats').bind('click', function() {
+  $('button#viewPurchases').bind('click', function() {
     $.ajax({
     type: "GET",
-      url: $SCRIPT_ROOT + "/stats",
+      url: $SCRIPT_ROOT + "/event_list",
       dataType: 'html',
       data: {
         'c': $(this).attr("value")
@@ -41,8 +41,8 @@ $(function() {
                 $('#pic').hide();
                 $('#what_if_analysis').hide();
                 $('#editEvents').hide();
-                $('#viewPurchase').hide();
-                $('#statistics').show();
+                $('#viewPurchase').show();
+                $('#statistics').hide();
         },
         success: function(data){
           $('#statistics').html(data);

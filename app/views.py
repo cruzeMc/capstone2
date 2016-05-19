@@ -84,21 +84,22 @@ def home():
                 if i.id not in cat_list:
                     cat_list.append(i.id)
     filtered_recommendations = filtered_recommendation()
-    first_list = filtered_recommendations[1]
-    second_list = filtered_recommendations[0]
+    if filtered_recommendations:
+        first_list = filtered_recommendations[1]
+        second_list = filtered_recommendations[0]
+        
+        in_first = set(first_list)
+        in_second = set(second_list)
     
-    in_first = set(first_list)
-    in_second = set(second_list)
-
-    in_second_but_not_in_first = in_second - in_first
-    
-    recommender = first_list + list(in_second_but_not_in_first)
-    for evnt_id in recommender:
-        recommending.append(Event.query.filter_by(id=evnt_id).first())
-    for evnts in recommending:
-        due = time_remainding(evnts.date,evnts.start_time)
-        recommendings.append({"id":evnts.id,"creator":evnts.creator,"category":evnts.category,"poster":evnts.poster,"eventname":evnts.eventname,"date":evnts.date,"start_time":evnts.start_time,"end_time":evnts.end_time,"venue":evnts.venue,"lat":evnts.lat,"lng":evnts.lng,"capacity":evnts.capacity,"addmission":evnts.admission,"description":evnts.description,"contact":evnts.contact,"days":due[0],"hours":due[1]})
-    
+        in_second_but_not_in_first = in_second - in_first
+        
+        recommender = first_list + list(in_second_but_not_in_first)
+        for evnt_id in recommender:
+            recommending.append(Event.query.filter_by(id=evnt_id).first())
+        for evnts in recommending:
+            due = time_remainding(evnts.date,evnts.start_time)
+            recommendings.append({"id":evnts.id,"creator":evnts.creator,"category":evnts.category,"poster":evnts.poster,"eventname":evnts.eventname,"date":evnts.date,"start_time":evnts.start_time,"end_time":evnts.end_time,"venue":evnts.venue,"lat":evnts.lat,"lng":evnts.lng,"capacity":evnts.capacity,"addmission":evnts.admission,"description":evnts.description,"contact":evnts.contact,"days":due[0],"hours":due[1]})
+        
     if recommend:
         return render_template('home.html',recommend=recommend,recommendings=recommendings,recommends=recommends,category=category,cat_list=cat_list)
     else:
@@ -111,7 +112,12 @@ def home():
 @app.route('/events/<int:cat>', methods=['GET','POST'])
 def events_listing(cat):
     form = GetEventForm()
-    event_lst = db.session.query(Event).filter_by(category=cat)
+    event_lst=[]
+    event_lsts = db.session.query(Event).filter_by(category=cat)
+    for evnt in event_lsts:
+        due = time_remainding(evnt.date,evnt.start_time)
+        event_lst.append({"id":evnt.id,"creator":evnt.creator,"category":evnt.category,"poster":evnt.poster,"eventname":evnt.eventname,"date":evnt.date,"start_time":evnt.start_time,"end_time":evnt.end_time,"venue":evnt.venue,"lat":evnt.lat,"lng":evnt.lng,"capacity":evnt.capacity,"addmission":evnt.admission,"description":evnt.description,"contact":evnt.contact,"days":due[0],"hours":due[1]})
+    event_lst.sort(key=lambda x: (x["days"]))
     card_lst = db.session.query(Card).filter_by(user_id=g.user).all()
     if request.method == "POST":
         session['event_number'] = form.event_number.data
@@ -288,44 +294,55 @@ def what_if_analysis():
         else:
             return render_template("failure.html")
 
+# @login_required
+# @app.route('/event_list', methods=['GET'])
+# @requires_roles('PROMOTER')
+# def event_list():
+#     u_list=[]
+#     ev_id = request.args.get('c', type=int)
+#     p_list = Payment.query.filter_by(event_id=ev_id).all()
+#     for u_id in p_list:
+#         u_list.append(Users.query.filter_by(id=u_id.users_id).first())
+#     return render_template('event_list.html', u_list=u_list)
+    
 def filtered_recommendation():
     rating=db.session.query(Rating).order_by(Rating.users_id).all()
     rating2=db.session.query(Rating).distinct(Rating.users_id).all()
-    
-    dic={}
-    dic2={}
-    for j in range(len(rating2)):
-        for r in range(len(rating)):
-            if rating[r].users_id == rating2[j].users_id:
-                dic[str(rating[r].event_id)]=int(rating[r].rate)
-        dic2[str(rating2[j].users_id)]=dic
+    if rating:
         dic={}
-
-    dic3=dic2
-    for key2 in dic3:
-        for key in dic2:
-            if len(dic3[key2])==len(dic2[key]):
-                algorithm=randint(1,3)
-            else:
-                algorithm=4
-                break
-    rec=ratings_recommender(str(g.user), dic2, algorithm)
-    cln=k_nearest_neighbour(str(g.user), dic2, 2, algorithm)
+        dic2={}
+        for j in range(len(rating2)):
+            for r in range(len(rating)):
+                if rating[r].users_id == rating2[j].users_id:
+                    dic[str(rating[r].event_id)]=int(rating[r].rate)
+            dic2[str(rating2[j].users_id)]=dic
+            dic={}
     
-    del dic2[str(g.user)]
-    predicted_lst=[]
-    for key3 in dic2:
-        for i in range(len(rec)):
-            if rec[i][0] in dic2[key3]:
-                if event_judge([(cln[0][1], cln[0][0], rec[i][0], rec[i][1]), (cln[1][1], cln[1][0], rec[i][0], rec[i][1])]) > 2:
-                    predicted_lst.append(rec[i][0])
-    
-    raw_lst=[]
-    for w in range(len(rec)):
-        raw_lst.append(rec[w][0])
-    
-    # pdb.set_trace()
-    return [raw_lst, predicted_lst]
+        dic3=dic2
+        for key2 in dic3:
+            for key in dic2:
+                if len(dic3[key2])==len(dic2[key]):
+                    algorithm=randint(1,3)
+                else:
+                    algorithm=4
+                    break
+        rec=ratings_recommender(str(g.user), dic2, algorithm)
+        cln=k_nearest_neighbour(str(g.user), dic2, 2, algorithm)
+        
+        del dic2[str(g.user)]
+        predicted_lst=[]
+        for key3 in dic2:
+            for i in range(len(rec)):
+                if rec[i][0] in dic2[key3]:
+                    if event_judge([(cln[0][1], cln[0][0], rec[i][0], rec[i][1]), (cln[1][1], cln[1][0], rec[i][0], rec[i][1])]) > 2:
+                        predicted_lst.append(rec[i][0])
+        
+        raw_lst=[]
+        for w in range(len(rec)):
+            raw_lst.append(rec[w][0])
+        
+        # pdb.set_trace()
+        return [raw_lst, predicted_lst]
 	
 @login_required
 @app.route("/welcome", methods=['GET', 'POST'])
@@ -523,7 +540,7 @@ def signup():
             new_user = Users(first_name,last_name,username,filename,email,address,sex,age,password,utype)
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('welcome'))
+            return redirect(url_for('login'))
     return render_template('signup.html', form=form)
     
 @login_required
